@@ -1,0 +1,13 @@
+_autocompl() 
+{
+  _script_commands="init remove shell start stop"
+
+  local cur
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W "${_script_commands}" -- ${cur}) )
+
+  return 0
+}
+complete -o nospace -F _autocompl melodic
+complete -o nospace -F _autocompl noetic

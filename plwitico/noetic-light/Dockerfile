@@ -1,0 +1,29 @@
+FROM ssilenzi/noetic:light
+LABEL org.opencontainers.image.title="Planning with tight contraints"
+LABEL org.opencontainers.image.description="Python / C++ implementation of framework of manipulation planning with tight environment constraints."
+LABEL org.opencontainers.image.source="https://github.com/CentroEPiaggio/planning-with-tight-constraints"
+LABEL org.opencontainers.image.authors="Simone Silenzi <s.silenzi1@gmail.com>"
+
+USER ubuntu
+WORKDIR /workspace
+
+# Install project dependencies
+ARG GITHUB_TOKEN
+ENV PATH="/usr/lib/ccache:${PATH}"
+RUN git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/" && \
+    git clone --branch ${ROS_DISTRO}-devel --depth 1 --recurse-submodules https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
+    git config --global --remove-section url."https://$GITHUB_TOKEN:@github.com/" && \
+    cd planning-with-tight-constraints/ && \
+    sudo apt-get update && \
+    rosdep update && \
+    wstool update -t src && \
+    rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
+    catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
+    catkin build && \
+    cd .. && rm -Rf planning-with-tight-constraints/ && mkdir planning-with-tight-constraints/ && \
+    sudo apt-get clean && \
+    sudo rm -Rf /var/lib/apt/lists/*
+
+# Start the container
+WORKDIR /workspace/planning-with-tight-constraints
+CMD ["bash"]
