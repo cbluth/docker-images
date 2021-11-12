@@ -14,5 +14,5 @@ catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Rele
     echo 'export PATH="/usr/lib/ccache:${PATH}"'; \
 ) >> ~/.bashrc && \
 source ~/.bashrc && \
-catkin build
+catkin build planning_with_tight_constraints
 
