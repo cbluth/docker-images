@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t ssilenzi/noetic:local "$(dirname ""$0"")"
+docker build -t ssilenzi/noetic:local $@ "$(dirname ""$0"")"
