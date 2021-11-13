@@ -151,7 +151,7 @@ ${DOCKER_EXECUTABLE:-docker} run \
     --env="XAUTHORITY=$XAUTH" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume="$XAUTH:$XAUTH" \
-    --volume=$HOME/gurobi.lic:/opt/gurobi950/gurobi.lic:ro \
+    --volume=$HOME/Tools/gurobi.lic:/opt/gurobi950/gurobi.lic:ro \
     ${NAME_OPTION:-} \
     ${DOCKER_PARAMS:-} \
     $@ ${DUMMY_DEFAULTS:-}
