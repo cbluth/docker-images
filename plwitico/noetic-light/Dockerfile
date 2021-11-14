@@ -29,6 +29,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
     sudo apt-get update && \
     rosdep update && \
     wstool update -t src && \
+    echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections && \
     rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
     catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
     catkin build && \
