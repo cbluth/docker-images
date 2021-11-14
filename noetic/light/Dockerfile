@@ -1,5 +1,4 @@
-ARG ROS_DISTRO=noetic
-FROM ros:${ROS_DISTRO}-ros-base
+FROM nvidia/cuda:11.4.2-base-ubuntu20.04
 LABEL org.opencontainers.image.title="ROS Noetic"
 LABEL org.opencontainers.image.description="A full Ubuntu environment."
 LABEL org.opencontainers.image.source="https://github.com/ssilenzi/docker-images"
@@ -9,39 +8,51 @@ ENV ROS_DISTRO=noetic
 # Non-interactive installation mode
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update apt database
-RUN apt update
-
 # Install essentials
-RUN apt install -y apt-utils software-properties-common apt-transport-https sudo \
+RUN apt-get update && \
+    apt-get install -y apt-utils software-properties-common apt-transport-https sudo \
     psmisc lsb-release nano wget curl telnet gnupg build-essential gdb git \
     cmake autoconf automake locales gdebi dos2unix bash-completion \
-    tzdata ssl-cert less zip unzip ccache
+    tzdata ssl-cert less zip unzip ccache clang-format-10 && \
+    apt-get clean && \
+    rm -Rf /var/lib/apt/lists/*
 
-# Time zone
+# Time zone and locale
 ENV TZ="Europe/Rome"
-RUN date > /dev/null    
+RUN date && (echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections) && locale-gen en_US.UTF-8
 
-# Set the locale
-RUN locale-gen en_US.UTF-8
-
-# Install LLVM
-RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | \
-    gpg --dearmor -o /etc/apt/trusted.gpg.d/llvm-snapshot.gpg && \
-    add-apt-repository "deb http://apt.llvm.org/$(lsb_release -sc)/ llvm-toolchain-$(lsb_release -sc)-13 main" && \
-    apt update && \
-    apt dist-upgrade -y && \
-    apt install -y --install-recommends clang-13 clangd-13 clang-format-13 clang-tidy-13 lld-13 llvm-13 && \
-    sed -i '/llvm/d' /etc/apt/sources.list && \
-    rm /etc/apt/trusted.gpg.d/llvm-snapshot.gpg
+# ROS
+RUN curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+    | gpg --dearmor -o /etc/apt/trusted.gpg.d/ros.gpg && \
+    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" \
+    > /etc/apt/sources.list.d/ros-latest.list && \
+    apt-get update && \
+    apt-get install -y ros-${ROS_DISTRO}-ros-base python3-catkin-tools python3-rosdep \
+    python3-rosinstall python3-rosinstall-generator python3-wstool && \
+    rosdep init && \
+    apt-get clean && \
+    rm -Rf /var/lib/apt/lists/*
 
 # Install Python
-RUN apt install -y python3 python3-autopep8 python3-dev python3-pip python3-pycodestyle python3-setuptools python3-virtualenv python3-wheel
+RUN apt-get update && \
+    apt-get install -y python3-autopep8 python3-dev python3-pip python3-pycodestyle python3-setuptools \
+    python3-virtualenv python3-wheel && \
+    apt-get clean && \
+    rm -Rf /var/lib/apt/lists/*
+
+# Install jupyter
+RUN pip3 install --ignore-installed ipython jupyter jupyterlab notebook testresources
+COPY start-jupyter /usr/bin/start-jupyter
+RUN chmod +x /usr/bin/start-jupyter && \
+    dos2unix /usr/bin/start-jupyter
 
 # Install Smartgit
-RUN wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_1_3.deb && \
+RUN apt-get update && \
+    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_1_3.deb && \
     gdebi -n smart.deb && \
-    rm smart.deb
+    rm smart.deb && \
+    apt-get clean && \
+    rm -Rf /var/lib/apt/lists/*
 
 # Create user ubuntu
 RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
@@ -51,9 +62,6 @@ RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
 
 # Switch to ubuntu user
 USER ubuntu
-
-# Rosdep update
-RUN rosdep update
 
 # Install Homebrew
 RUN mkdir ~/.cache && bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -71,10 +79,6 @@ RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prom
 
 # Switch back to root
 USER root
-
-# Clean up unnecessary installation products
-RUN apt clean && \
-    rm -Rf /var/lib/apt/lists/*
 
 # Create workspace
 RUN mkdir /workspace
