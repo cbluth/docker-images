@@ -71,14 +71,21 @@ ENV INFOPATH="${INFOPATH}:/home/linuxbrew/.linuxbrew/share/info"
 ENV HOMEBREW_NO_AUTO_UPDATE=1
 ENV GIT_PROMPT_ONLY_IN_REPO=1
 
-# Set up env variables
-ENV PATH="/home/ubuntu/.local/bin:/usr/local/bin:/usr/share/smartgit/bin:${PATH}"
+# Set up path var
+ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
 
 # Install informative git for bash
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
 
 # Switch back to root
 USER root
+
+# Set up ccache
+RUN cp /usr/bin/ccache /usr/local/bin/ && \
+    ln -s /usr/bin/ccache /usr/local/bin/gcc && \
+    ln -s /usr/bin/ccache /usr/local/bin/g++ && \
+    ln -s /usr/bin/ccache /usr/local/bin/cc  && \
+    ln -s /usr/bin/ccache /usr/local/bin/c++
 
 # Create workspace
 RUN mkdir /workspace

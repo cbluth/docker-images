@@ -9,7 +9,6 @@ WORKDIR /workspace
 
 # Install project dependencies
 ARG GITHUB_TOKEN
-ENV PATH="/usr/lib/ccache:${PATH}"
 RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.tar.gz && \
     sudo mv gurobi.tar.gz /opt/ && \
     sudo chown root:root /opt/gurobi.tar.gz && \
@@ -23,7 +22,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
     echo "export LD_LIBRARY_PATH=\"\${LD_LIBRARY_PATH}:\${GUROBI_HOME}/lib\"" \
     ) >> ~/.bashrc && \
     git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/" && \
-    git clone --branch ${ROS_DISTRO}-devel --depth 1 --recurse-submodules https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
+    git clone --branch ${ROS_DISTRO}-devel --depth 1 https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
     git config --global --remove-section url."https://$GITHUB_TOKEN:@github.com/" && \
     cd planning-with-tight-constraints/ && \
     sudo apt-get update && \

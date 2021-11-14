@@ -9,9 +9,6 @@ catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Rele
     echo ''; \
     echo '# source project'; \
     echo 'source /workspace/planning-with-tight-constraints/devel/setup.bash'; \
-    echo ''; \
-    echo '# ccache'; \
-    echo 'export PATH="/usr/lib/ccache:${PATH}"'; \
 ) >> ~/.bashrc && \
 source ~/.bashrc && \
 catkin build planning_with_tight_constraints
