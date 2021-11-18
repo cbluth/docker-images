@@ -30,7 +30,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   rosdep update && \
   wstool update -t src && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
-  sudo -H pip install --upgrade cvxopt gurobipy==9.1.2 osqp pulp pyopt qpsolvers==1.4.1 && \
+  sudo -H pip install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 osqp==0.5.0 pulp pyopt qpsolvers==1.4.1 && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \
