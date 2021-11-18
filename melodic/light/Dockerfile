@@ -48,12 +48,15 @@ RUN chmod +x /usr/bin/start-jupyter && \
     dos2unix /usr/bin/start-jupyter
 
 # Install Smartgit
+COPY smartgit /usr/bin/
 RUN apt-get update && \
     wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_1_3.deb && \
     gdebi -n smart.deb && \
     rm smart.deb && \
     apt-get clean && \
-    rm -Rf /var/lib/apt/lists/*
+    rm -Rf /var/lib/apt/lists/* && \
+    chmod +x /usr/bin/smartgit && \
+    dos2unix /usr/bin/smartgit
 
 # Create user ubuntu
 RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
