@@ -9,7 +9,7 @@ WORKDIR /workspace
 
 # Install project dependencies
 ARG GITHUB_TOKEN
-RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.tar.gz && \
+RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.tar.gz && \
   sudo mv gurobi.tar.gz /opt/ && \
   sudo chown root:root /opt/gurobi.tar.gz && \
   sudo tar -C /opt -xzvf /opt/gurobi.tar.gz && \
@@ -17,7 +17,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
   ( \
   echo ""; \
   echo "# gurobi"; \
-  echo "export GUROBI_HOME=\"/opt/gurobi950/linux64\""; \
+  echo "export GUROBI_HOME=\"/opt/gurobi912/linux64\""; \
   echo "export PATH=\"\${PATH}:\${GUROBI_HOME}/bin\""; \
   echo "export LD_LIBRARY_PATH=\"\${LD_LIBRARY_PATH}:\${GUROBI_HOME}/lib\"" \
   ) >> ~/.bashrc && \
@@ -30,7 +30,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
   rosdep update && \
   wstool update -t src && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
-  sudo -H pip install --upgrade gurobipy==9.5.0 pulp pyopt && \
+  sudo -H pip install --upgrade gurobipy==9.1.2 pulp pyopt && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \
