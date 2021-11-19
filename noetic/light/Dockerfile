@@ -91,10 +91,10 @@ RUN cp /usr/bin/ccache /usr/local/bin/ && \
     ln -s /usr/bin/ccache /usr/local/bin/c++
 
 # Create workspace
-RUN mkdir /workspace
+RUN mkdir /workspaces
 
 # Make sure specific dirs are owned by ubuntu user
-RUN chown -R ubuntu:ubuntu /workspace && \
+RUN chown -R ubuntu:ubuntu /workspaces && \
     chown -R ubuntu:ubuntu /home/ubuntu
 
 # Change user
@@ -113,5 +113,5 @@ RUN ( \
     ) >> ~/.bashrc
 
 # Start bash
-WORKDIR /workspace
+WORKDIR /workspaces
 CMD ["bash"]
