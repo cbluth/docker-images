@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.source="https://github.com/CentroEPiaggio/plannin
 LABEL org.opencontainers.image.authors="Simone Silenzi <s.silenzi1@gmail.com>"
 
 USER ubuntu
-WORKDIR /workspace
+WORKDIR /workspaces
 
 # Install project dependencies
 ARG GITHUB_TOKEN
@@ -43,5 +43,5 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   sudo rm -Rf /var/lib/apt/lists/*
 
 # Start the container
-WORKDIR /workspace/planning-with-tight-constraints
+WORKDIR /workspaces/planning-with-tight-constraints
 CMD ["bash"]
