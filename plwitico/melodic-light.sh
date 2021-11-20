@@ -103,7 +103,7 @@ else
 fi
 
 if [ "${ACTION}" = "remove" ] ; then
-  docker stop ${CONTAINER_NAME}
+  docker kill ${CONTAINER_NAME}
   docker rm -v -f ${CONTAINER_NAME}
   exit 0
 fi
