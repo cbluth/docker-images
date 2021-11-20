@@ -11,5 +11,5 @@ catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Rele
     echo 'source /workspaces/planning-with-tight-constraints/devel/setup.bash'; \
 ) >> ~/.bashrc && \
 source ~/.bashrc && \
-catkin build planning_with_tight_constraints
+catkin build planning_with_tight_constraints && ./.compile_commands.sh
 
