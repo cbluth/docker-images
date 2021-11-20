@@ -157,10 +157,10 @@ ${DOCKER_EXECUTABLE:-docker} run \
     $@ ${DUMMY_DEFAULTS:-}
 docker cp "$(dirname ""$0"")/smartgit" $CONTAINER_NAME:/home/ubuntu/.config/
 docker exec -it $CONTAINER_NAME bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
-docker cp "$(dirname ""$0"")/melodic-init.sh" $CONTAINER_NAME:/workspace/
-docker exec -it $CONTAINER_NAME bash -i -c "sudo chown ubuntu:ubuntu /workspace/melodic-init.sh; \
-                              bash /workspace/melodic-init.sh; \
-                              rm /workspace/melodic-init.sh"
+docker cp "$(dirname ""$0"")/melodic-init.sh" $CONTAINER_NAME:/workspaces/
+docker exec -it $CONTAINER_NAME bash -i -c "sudo chown ubuntu:ubuntu /workspaces/melodic-init.sh; \
+                              bash /workspaces/melodic-init.sh; \
+                              rm /workspaces/melodic-init.sh"
 
 # cleanup
 rm $XAUTH

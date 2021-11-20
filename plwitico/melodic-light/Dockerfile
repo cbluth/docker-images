@@ -30,7 +30,9 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   rosdep update && \
   wstool update -t src && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
-  sudo -H pip install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 osqp==0.5.0 pulp pyopt qpsolvers==1.4.1 && \
+  sudo apt-get clean && \
+  sudo rm -Rf /var/lib/apt/lists/* && \
+  sudo -H pip install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 osqp==0.5.0 pulp pyopt quadprog && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \
@@ -38,9 +40,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
   catkin build && \
   ccache -s && \
-  cd .. && rm -Rf planning-with-tight-constraints/ && mkdir planning-with-tight-constraints/ && \
-  sudo apt-get clean && \
-  sudo rm -Rf /var/lib/apt/lists/*
+  cd .. && rm -Rf planning-with-tight-constraints/ && mkdir planning-with-tight-constraints/
 
 # Start the container
 WORKDIR /workspaces/planning-with-tight-constraints
