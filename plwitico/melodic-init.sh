@@ -8,7 +8,8 @@ catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Rele
 ( \
     echo ''; \
     echo '# source project'; \
-    echo 'source /workspaces/planning-with-tight-constraints/devel/setup.bash'; \
+    echo 'SETUP_SCRIPT=/workspaces/planning-with-tight-constraints/devel/setup.bash'; \
+    echo 'if [ -f \$SETUP_SCRIPT ]; then source \$SETUP_SCRIPT; fi'; \
 ) >> ~/.bashrc && \
 source ~/.bashrc && \
 catkin build planning_with_tight_constraints && ./.compile_commands.sh
