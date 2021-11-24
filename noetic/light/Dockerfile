@@ -15,7 +15,7 @@ RUN apt-get update && \
     psmisc lsb-release nano wget curl telnet gnupg build-essential gdb git \
     cmake autoconf automake locales gdebi dos2unix bash-completion \
     tzdata ssl-cert less zip unzip ccache clang-format-10 \
-    gedit x11-apps && \
+    gedit nautilus x11-apps && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/*
 
@@ -43,7 +43,8 @@ RUN apt-get update && \
     rm -Rf /var/lib/apt/lists/*
 
 # Install jupyter
-RUN pip3 install --ignore-installed ipython jupyter jupyterlab notebook testresources
+RUN pip3 install --ignore-installed ipython jupyter jupyterlab notebook testresources && \
+    rm -rf /root/.cache
 COPY start-jupyter /usr/bin/start-jupyter
 RUN chmod +x /usr/bin/start-jupyter && \
     dos2unix /usr/bin/start-jupyter
