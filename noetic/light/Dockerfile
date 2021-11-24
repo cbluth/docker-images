@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install essentials
 RUN apt-get update && \
+    apt-get dist-upgrade -y && \
     apt-get install -y apt-utils software-properties-common apt-transport-https sudo \
     psmisc lsb-release nano wget curl telnet gnupg build-essential gdb git \
     cmake autoconf automake locales gdebi dos2unix bash-completion \
