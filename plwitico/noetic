@@ -22,7 +22,7 @@ case $1 in
     exit $?
     ;;
   
-  remove)
+  rm)
     docker rm -v -f plwitico-noetic
     exit $?
     ;;
