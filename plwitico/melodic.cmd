@@ -19,6 +19,7 @@ exit /B 1
         --env="QT_X11_NO_MITSHM=1" ^
         --volume="%~dp0\gurobi.lic":"/opt/gurobi950/gurobi.lic":ro ^
         ssilenzi/plwitico:melodic-light
+    docker exec -it plwitico-melodic bash -c "echo ^"127.0.0.1 %COMPUTERNAME%^" | sudo tee -a /etc/hosts" 1> NUL 2>&1
     docker cp "%~dp0\smartgit" plwitico-melodic:/home/ubuntu/.config/
     docker exec -it plwitico-melodic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
     docker cp "%~dp0\melodic-init.sh" plwitico-melodic:/workspaces/
