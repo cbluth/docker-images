@@ -19,7 +19,7 @@ exit /B 1
         --env="QT_X11_NO_MITSHM=1" ^
         --volume="%~dp0\gurobi.lic":"/opt/gurobi950/gurobi.lic":ro ^
         ssilenzi/plwitico:noetic-light
-    docker exec -it plwitico-noetic bash -c "echo ^"127.0.0.1 %COMPUTERNAME%^" | sudo tee -a /etc/hosts" 1> NUL 2>&1
+    docker exec -it plwitico-noetic bash -c ^"echo \^"127.0.0.1 %COMPUTERNAME%\^" ^| sudo tee -a /etc/hosts^" 1> NUL 2>&1
     docker cp "%~dp0\smartgit" plwitico-noetic:/home/ubuntu/.config/
     docker exec -it plwitico-noetic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
     docker cp "%~dp0\noetic-init.sh" plwitico-noetic:/workspaces/
