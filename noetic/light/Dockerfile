@@ -13,7 +13,8 @@ RUN apt-get update && \
     apt-get install -y apt-utils software-properties-common apt-transport-https sudo \
     psmisc lsb-release nano wget curl telnet gnupg build-essential gdb git \
     cmake autoconf automake locales gdebi dos2unix bash-completion \
-    tzdata ssl-cert less zip unzip ccache clang-format-10 && \
+    tzdata ssl-cert less zip unzip ccache clang-format-10 \
+    gedit x11-apps && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/*
 
