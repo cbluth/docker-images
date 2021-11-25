@@ -8,6 +8,9 @@ echo No start / stop supplied
 exit /B 1
 
 :init
+    ipconfig.exe | grep 'vEthernet (WSL)' -A4 | cut -d':' -f 2 | tail -n1 | sed -e 's/\s*//g' > tmp
+    set /p HOST= < tmp
+    del tmp
     docker run -d -t ^
         --network=host ^
         --cap-add=SYS_PTRACE ^
@@ -15,11 +18,10 @@ exit /B 1
         --security-opt=apparmor:unconfined ^
         --gpus=all ^
         --name plwitico-melodic ^
-        --env="DISPLAY=172.22.32.1:0" ^
+        --env="DISPLAY=%HOST%:0" ^
         --env="QT_X11_NO_MITSHM=1" ^
         --volume="%~dp0\gurobi.lic":"/opt/gurobi950/gurobi.lic":ro ^
         ssilenzi/plwitico:melodic-light
-    docker exec -it plwitico-noetic bash -c ^"echo \^"127.0.0.1 %COMPUTERNAME%\^" ^| sudo tee -a /etc/hosts^" 1> NUL 2>&1
     docker cp "%~dp0\smartgit" plwitico-melodic:/home/ubuntu/.config/
     docker exec -it plwitico-melodic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
     docker cp "%~dp0\melodic-init.sh" plwitico-melodic:/workspaces/
