@@ -4,15 +4,12 @@ case $1 in
   init)
     docker run -d \
       --shm-size=4g \
-      -p 127.0.0.1:2222:22 \
       -p 127.0.0.1:5901:6080 \
-      -p 127.0.0.1:11311:11311 \
-      --expose 11311 \
       --cap-add=SYS_PTRACE \
       --security-opt seccomp=unconfined \
+      --security-opt=apparmor:unconfined \
       --name plwitico-noetic \
       ssilenzi/plwitico:noetic-local
-    ssh-keygen -f ~/.ssh/known_hosts -R "localhost]:2222"
     docker cp "$(dirname ""$0"")/smartgit" plwitico-noetic:/home/ubuntu/.config/
     docker exec -it plwitico-noetic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
     docker cp "$(dirname ""$0"")/noetic-init.sh" plwitico-noetic:/workspace/

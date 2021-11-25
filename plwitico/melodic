@@ -4,15 +4,12 @@ case $1 in
   init)
     docker run -d \
       --shm-size=4g \
-      -p 127.0.0.1:4444:22 \
       -p 127.0.0.1:5902:6080 \
-      -p 127.0.0.1:22622:11311 \
-      --expose 11311 \
       --cap-add=SYS_PTRACE \
       --security-opt seccomp=unconfined \
+      --security-opt=apparmor:unconfined \
       --name plwitico-melodic \
       ssilenzi/plwitico:melodic-local
-    ssh-keygen -f ~/.ssh/known_hosts -R "localhost]:2222"
     docker cp "$(dirname ""$0"")/smartgit" plwitico-melodic:/home/ubuntu/.config/
     docker exec -it plwitico-melodic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
     docker cp "$(dirname ""$0"")/melodic-init.sh" plwitico-melodic:/workspace/

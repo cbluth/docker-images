@@ -5,22 +5,43 @@ LABEL org.opencontainers.image.source="https://github.com/CentroEPiaggio/plannin
 LABEL org.opencontainers.image.authors="Simone Silenzi <s.silenzi1@gmail.com>"
 
 USER ubuntu
-WORKDIR /workspace
+WORKDIR /workspaces
 
 # Install project dependencies
 ARG GITHUB_TOKEN
-RUN git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/" && \
-    git clone --branch ${ROS_DISTRO}-devel --depth 1 https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
-    git config --global --remove-section url."https://$GITHUB_TOKEN:@github.com/" && \
-    cd planning-with-tight-constraints/ && \
-    sudo apt-get update && \
-    rosdep update && \
-    wstool update -t src && \
-    rosdep install --from-paths src --ignore-src --rosdistro melodic -r -y && \
-    cd .. && rm -Rf planning-with-tight-constraints/ && \
-    sudo apt-get clean && \
-    sudo rm -Rf /var/lib/apt/lists/*
+RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.tar.gz && \
+  sudo mv gurobi.tar.gz /opt/ && \
+  sudo chown root:root /opt/gurobi.tar.gz && \
+  sudo tar -C /opt -xzvf /opt/gurobi.tar.gz && \
+  sudo rm /opt/gurobi.tar.gz && \
+  ( \
+  echo ""; \
+  echo "# gurobi"; \
+  echo "export GUROBI_HOME=\"/opt/gurobi912/linux64\""; \
+  echo "export PATH=\"\${PATH}:\${GUROBI_HOME}/bin\""; \
+  echo "export LD_LIBRARY_PATH=\"\${LD_LIBRARY_PATH}:\${GUROBI_HOME}/lib\"" \
+  ) >> ~/.bashrc && \
+  git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/" && \
+  git clone --branch ${ROS_DISTRO}-devel --depth 1 \
+  https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
+  git config --global --remove-section url."https://$GITHUB_TOKEN:@github.com/" && \
+  cd planning-with-tight-constraints/ && \
+  sudo apt-get update && \
+  rosdep update && \
+  wstool update -t src && \
+  rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
+  sudo apt-get clean && \
+  sudo rm -Rf /var/lib/apt/lists/* && \
+  sudo -H pip2 install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 osqp==0.5.0 pulp pyclean pyopt quadprog && \
+  sudo rm -rf /root/.cache && \
+  catkin --version && \
+  rm -rf src/planning_with_tight_constraints/ && \
+  catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
+  catkin build && \
+  ccache -s && \
+  cd .. && rm -Rf planning-with-tight-constraints/ && mkdir planning-with-tight-constraints/
 
 # Start the container
-CMD start-vnc-session.sh && \
-    sudo -H /usr/sbin/sshd -D -e
+WORKDIR /workspaces/planning-with-tight-constraints
+CMD start-vnc-session.sh && bash
