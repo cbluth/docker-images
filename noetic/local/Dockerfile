@@ -7,6 +7,7 @@ ENV ROS_DISTRO=noetic
 
 # Non-interactive installation mode
 ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Install essentials
 RUN apt-get update && \
@@ -21,13 +22,12 @@ RUN apt-get update && \
 
 # Time zone and locale
 ENV TZ="Europe/Rome"
-RUN date && (echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections) && locale-gen en_US.UTF-8
+RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 && date
 
 # Install graphics
 RUN apt-get update && \
-    apt-get install -y mate-desktop-environment mate-panel xserver-xorg-video-dummy xserver-xorg-legacy caja \
-    pluma terminator x11vnc && \
-    apt-get purge --autoremove -y mate-power-manager indicator-applet-complete && \
+    apt-get install -y lxqt-core pcmanfm-qt gedit terminator xserver-xorg-video-dummy xserver-xorg-legacy x11vnc && \
+    apt-get purge --autoremove -y featherpad mutter lxqt-powermanagement && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/* && \
     sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
@@ -39,8 +39,10 @@ RUN add-apt-repository -y ppa:saiarcot895/chromium-beta && \
     echo "Package: *" >> /etc/apt/preferences.d/pin-chromium-deb && \
     echo "Pin: release o=LP-PPA-saiarcot895-chromium-beta" >> /etc/apt/preferences.d/pin-chromium-deb && \
     echo "Pin-Priority: 1337" >> /etc/apt/preferences.d/pin-chromium-deb && \
-    apt update && \
-    apt install -y chromium-browser
+    apt-get update && \
+    apt-get install -y chromium-browser && \
+    apt-get clean && \
+    rm -Rf /var/lib/apt/lists/*
 
 # Install noVNC
 RUN git clone https://github.com/novnc/noVNC.git /opt/novnc && \
@@ -111,9 +113,9 @@ RUN cp /usr/bin/ccache /usr/local/bin/ && \
     ln -s /usr/bin/ccache /usr/local/bin/c++
 
 # Set up script to launch graphics and vnc
-COPY start-vnc-session.sh /usr/bin/start-vnc-session.sh
-RUN chmod +x /usr/bin/start-vnc-session.sh && \
-    dos2unix /usr/bin/start-vnc-session.sh
+COPY start-vnc-session /usr/bin/
+RUN chmod +x /usr/bin/start-vnc-session && \
+    dos2unix /usr/bin/start-vnc-session
 
 # Create workspace
 RUN mkdir /workspaces && \
@@ -155,5 +157,5 @@ RUN ( \
 
 # Start bash
 WORKDIR /workspaces
-CMD start-vnc-session.sh && \
-    bash -i
+ENTRYPOINT [ "start-vnc-session" ]
+CMD [ "bash", "-i" ]

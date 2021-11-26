@@ -44,4 +44,5 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
 
 # Start the container
 WORKDIR /workspaces/planning-with-tight-constraints
-CMD start-vnc-session.sh && bash
+ENTRYPOINT [ "start-vnc-session" ]
+CMD [ "bash", "-i" ]

@@ -10,9 +10,9 @@ case $1 in
       --security-opt=apparmor:unconfined \
       --name plwitico-noetic \
       ssilenzi/plwitico:noetic-local
-    docker cp "$(dirname ""$0"")/smartgit" plwitico-noetic:/home/ubuntu/.config/
+    docker cp $(dirname "$0")/smartgit plwitico-noetic:/home/ubuntu/.config/
     docker exec -it plwitico-noetic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"
-    docker cp "$(dirname ""$0"")/noetic-init.sh" plwitico-noetic:/workspace/
+    docker cp $(dirname "$0")/noetic-init.sh plwitico-noetic:/workspace/
     docker exec -it plwitico-noetic bash -i -c "sudo chown ubuntu:ubuntu /workspace/noetic-init.sh; \
                                       bash /workspace/noetic-init.sh; \
                                       rm /workspace/noetic-init.sh"
