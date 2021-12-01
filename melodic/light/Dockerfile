@@ -39,7 +39,7 @@ RUN curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
 RUN apt-get update && \
     apt-get install -y python python-dev python-pip python-setuptools python-virtualenv python-wheel \
     python3 python3-pep8 python3-dev python3-pip python3-pycodestyle python3-setuptools python3-virtualenv python3-wheel && \
-    pip3 install --upgrade catkin_tools && \
+    pip3 install --upgrade autopep8 catkin_tools && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
