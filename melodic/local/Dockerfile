@@ -58,14 +58,15 @@ RUN curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
 # Install Python
 RUN apt-get update && \
     apt-get install -y python python-dev python-pip python-setuptools python-virtualenv python-wheel \
-    python3 python3-pep8 python3-dev python3-pip python3-pycodestyle python3-setuptools python3-virtualenv python3-wheel && \
+    python3 python3-pep8 python3-dev python3-pip python3-pycodestyle python3-setuptools python3-virtualenv \
+    python3-wheel mypy python3-mypy && \
     pip3 install --upgrade autopep8 catkin_tools && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
 
 # Install jupyter
-RUN pip3 install --ignore-installed ipython jupyter jupyterlab notebook testresources && \
+RUN pip3 install --ignore-installed --upgrade ipython jupyter jupyterlab notebook testresources pyclean && \
     rm -rf /root/.cache
 COPY start-jupyter /usr/bin/start-jupyter
 RUN chmod +x /usr/bin/start-jupyter && \
