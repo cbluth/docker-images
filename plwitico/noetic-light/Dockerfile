@@ -28,6 +28,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
   cd planning-with-tight-constraints/ && \
   sudo apt-get update && \
   rosdep update && \
+  sudo apt-get dist-upgrade -y && \
   wstool update -t src && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
   sudo apt-get clean && \
