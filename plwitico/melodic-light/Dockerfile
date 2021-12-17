@@ -21,6 +21,16 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   echo "export PATH=\"\${PATH}:\${GUROBI_HOME}/bin\""; \
   echo "export LD_LIBRARY_PATH=\"\${LD_LIBRARY_PATH}:\${GUROBI_HOME}/lib\"" \
   ) >> ~/.bashrc && \
+  wget -O mosek.tar.bz2 https://download.mosek.com/stable/9.2.49/mosektoolslinux64x86.tar.bz2 && \
+  sudo mv mosek.tar.bz2 /opt/ && \
+  sudo chown root:root /opt/mosek.tar.bz2 && \
+  sudo tar -C /opt -xjvf /opt/mosek.tar.bz2 && \
+  sudo rm /opt/mosek.tar.bz2 && \
+  ( \  
+  echo ""; \
+  echo "# mosek"; \
+  echo "export PATH=\"\${PATH}:/opt/mosek/9.2/tools/platform/linux64x86/bin\""; \
+  ) >> ~/.bashrc && \
   git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/" && \
   git clone --branch ${ROS_DISTRO}-devel --depth 1 \
   https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
@@ -29,11 +39,13 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   sudo apt-get update && \
   rosdep update && \
   sudo apt-get dist-upgrade -y && \
+  sudo apt-get install -y libglpk-dev && \
   wstool update -t src && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
   sudo apt-get clean && \
   sudo rm -Rf /var/lib/apt/lists/* && \
-  sudo -H pip2 install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 osqp==0.5.0 pulp pyopt quadprog && \
+  mkdir ${HOME}/mosek/ && \
+  sudo -H CVXOPT_BUILD_GLPK=1 pip2 install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 mosek==9.2.49 osqp==0.5.0 pulp pyopt quadprog && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \

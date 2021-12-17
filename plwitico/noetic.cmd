@@ -21,6 +21,7 @@ exit /B 1
         --env="DISPLAY=%HOST%:0" ^
         --env="QT_X11_NO_MITSHM=1" ^
         --volume="%~dp0\gurobi.lic":"/opt/gurobi950/gurobi.lic":ro ^
+        --volume="%~dp0\mosek.lic":"/home/ubuntu/mosek/mosek.lic":ro ^
         ssilenzi/plwitico:noetic-light
     docker cp "%~dp0\smartgit" plwitico-noetic:/home/ubuntu/.config/
     docker exec -it plwitico-noetic bash -c "sudo chown -R ubuntu:ubuntu /home/ubuntu/.config/smartgit/"

@@ -152,6 +152,7 @@ ${DOCKER_EXECUTABLE:-docker} run \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume="$XAUTH:$XAUTH" \
     --volume=$(dirname "$0")/gurobi.lic:/opt/gurobi950/gurobi.lic:ro \
+    --volume=$HOME/mosek/mosek.lic:/home/ubuntu/mosek/mosek.lic:ro \
     ${NAME_OPTION:-} \
     ${DOCKER_PARAMS:-} \
     $@ ${DUMMY_DEFAULTS:-}
