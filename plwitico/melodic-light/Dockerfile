@@ -39,13 +39,14 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   sudo apt-get update && \
   rosdep update && \
   sudo apt-get dist-upgrade -y && \
-  sudo apt-get install -y libglpk-dev && \
+  sudo apt-get install -y coinor-libipopt-dev gfortran libglpk-dev libmetis-dev && \
   wstool update -t src && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
   sudo apt-get clean && \
   sudo rm -Rf /var/lib/apt/lists/* && \
   mkdir ${HOME}/mosek/ && \
-  sudo -H CVXOPT_BUILD_GLPK=1 pip2 install --upgrade cvxopt==1.1.8 gurobipy==9.1.2 mosek==9.2.49 osqp==0.5.0 pulp pyopt PYPOWER quadprog && \
+  sudo -H CVXOPT_BUILD_GLPK=1 pip2 install cvxopt==1.1.8 gurobipy==9.1.2 mosek==9.2.49 osqp==0.5.0 pulp pyopt PYPOWER quadprog && \
+  sudo -H pip3 install ipopt && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \

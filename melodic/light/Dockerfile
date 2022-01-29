@@ -15,7 +15,7 @@ RUN apt-get update && \
     psmisc lsb-release nano wget curl telnet gnupg build-essential gdb git \
     cmake autoconf automake locales gdebi dos2unix bash-completion \
     tzdata ssl-cert less zip unzip ccache clang-format-10 \
-    gedit nautilus x11-apps && \
+    gedit dbus-x11 nautilus x11-apps && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/*
 

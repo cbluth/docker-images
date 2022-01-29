@@ -15,8 +15,7 @@ RUN apt-get update && \
     apt-get install -y apt-utils software-properties-common apt-transport-https sudo \
     psmisc lsb-release nano wget curl telnet gnupg build-essential gdb git \
     cmake autoconf automake locales gdebi dos2unix bash-completion \
-    tzdata ssl-cert less zip unzip ccache clang-format-10 \
-    gedit nautilus x11-apps && \
+    tzdata ssl-cert less zip unzip ccache clang-format-10 && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/*
 
@@ -26,7 +25,7 @@ RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 && date
 
 # Install graphics
 RUN apt-get update && \
-    apt-get install -y lxqt-core pcmanfm-qt gedit terminator xserver-xorg-video-dummy xserver-xorg-legacy x11vnc && \
+    apt-get install -y lxqt-core dbus-x11 pcmanfm-qt gedit terminator xserver-xorg-video-dummy xserver-xorg-legacy x11vnc x11-apps && \
     apt-get purge --autoremove -y featherpad mutter lxqt-powermanagement && \
     apt-get clean && \
     rm -Rf /var/lib/apt/lists/* && \
