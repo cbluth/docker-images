@@ -1,19 +1,20 @@
 {
-        "extensions": [
-                "DotJoshJohnson.xml",
-                "eamodio.gitlens",
-                "GitHub.vscode-pull-request-github",
-                "ms-iot.vscode-ros",
-                "ms-python.python",
-                "ms-toolsai.jupyter",
-                "ms-toolsai.jupyter-keymap",
-                "ms-toolsai.jupyter-renderers",
-                "ms-vscode.cpptools",
-                "redhat.vscode-yaml",
-                "smilerobotics.urdf",
-                "twxs.cmake",
-                "xaver.clang-format",
-                "yzhang.markdown-all-in-one"
-        ],
-        "workspaceFolder": "/workspaces/planning-with-tight-constraints"
+	"extensions": [
+		"DotJoshJohnson.xml",
+		"eamodio.gitlens",
+		"GitHub.vscode-pull-request-github",
+		"ms-iot.vscode-ros",
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-toolsai.jupyter",
+		"ms-toolsai.jupyter-keymap",
+		"ms-toolsai.jupyter-renderers",
+		"ms-vscode.cpptools",
+		"redhat.vscode-yaml",
+		"smilerobotics.urdf",
+		"twxs.cmake",
+		"xaver.clang-format",
+		"yzhang.markdown-all-in-one"
+	],
+	"workspaceFolder": "/workspaces/planning-with-tight-constraints"
 }
