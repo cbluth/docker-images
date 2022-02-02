@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.4.2-base-ubuntu20.04
+FROM nvidia/cuda:11.6.0-base-ubuntu20.04
 LABEL org.opencontainers.image.title="ROS Noetic"
 LABEL org.opencontainers.image.description="A full Ubuntu environment."
 LABEL org.opencontainers.image.source="https://github.com/ssilenzi/docker-images"
