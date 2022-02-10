@@ -60,7 +60,7 @@ RUN apt-get update && \
     chmod +x /usr/bin/smartgit && \
     dos2unix /usr/bin/smartgit
 
-# Create user ubuntu
+# Create ubuntu user
 RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
     yes ubuntu | passwd ubuntu && \
     # passwordless sudo for users in the 'sudo' group
