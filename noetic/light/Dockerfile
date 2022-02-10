@@ -77,7 +77,7 @@ ENV INFOPATH="${INFOPATH}:/home/linuxbrew/.linuxbrew/share/info"
 ENV HOMEBREW_NO_AUTO_UPDATE=1
 ENV GIT_PROMPT_ONLY_IN_REPO=1
 
-# Set up en vars
+# Setup env vars
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
 ENV XDG_RUNTIME_DIR="/run/user/$(id -u)"
 
