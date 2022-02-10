@@ -82,7 +82,6 @@ ENV GIT_PROMPT_ONLY_IN_REPO=1
 
 # Setup env vars
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
-ENV XDG_RUNTIME_DIR="/run/user/$(id -u)"
 
 # Install informative git for bash
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
@@ -99,13 +98,16 @@ RUN cp /usr/bin/ccache /usr/local/bin/ && \
 
 # Make sure specific dirs are owned by ubuntu user
 RUN chown -R ubuntu:ubuntu /workspaces && \
-    chown -R ubuntu:ubuntu /home/ubuntu && \
-    chown -R ubuntu:ubuntu /run/user/$(id -u ubuntu) && \
-    chmod -R 0700 /run/user/$(id -u ubuntu)
-    
+    chown -R ubuntu:ubuntu /home/ubuntu
+
+# XDG_RUNTIME_DIR
+RUN mkdir /run/user/1000 && \
+    chown -R ubuntu:ubuntu /run/user/1000 && \
+    chmod -R 0700 /run/user/1000
+ENV XDG_RUNTIME_DIR="/run/user/1000"
+
 # Create dirs
-RUN mkdir /workspaces && \
-    mkdir /run/user/$(id -u ubuntu)
+RUN mkdir /workspaces
 
 # Change user
 USER ubuntu
@@ -125,3 +127,4 @@ RUN ( \
 # Start bash
 WORKDIR /workspaces
 CMD ["bash"]
+

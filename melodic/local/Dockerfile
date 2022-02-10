@@ -94,7 +94,6 @@ USER ubuntu
 # Setup env vars
 ENV DISPLAY=:0
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
-ENV XDG_RUNTIME_DIR="/run/user/$(id -u)"
 
 # Install informative git for bash
 ENV GIT_PROMPT_ONLY_IN_REPO=1
@@ -115,12 +114,17 @@ COPY start-vnc-session /usr/bin/
 RUN chmod +x /usr/bin/start-vnc-session && \
     dos2unix /usr/bin/start-vnc-session
 
+# XDG_RUNTIME_DIR
+RUN mkdir /run/user/1000 && \
+    chown -R ubuntu:ubuntu /run/user/1000 && \
+    chmod -R 0700 /run/user/1000
+ENV XDG_RUNTIME_DIR="/run/user/1000"
+
 # Create dirs
 RUN mkdir /workspaces && \
     mkdir /home/ubuntu/Desktop && \
     mkdir /home/ubuntu/.config && \
-    touch /home/ubuntu/.config/mimeapps.list && \
-    mkdir /run/user/$(id -u ubuntu)
+    touch /home/ubuntu/.config/mimeapps.list
 
 # Setup icons
 COPY ["chromium-browser.desktop", "/usr/share/applications/chromium-browser.desktop"]
@@ -134,9 +138,7 @@ RUN cp /usr/share/applications/chromium-browser.desktop /home/ubuntu/Desktop/chr
 
 # Make sure specific dirs are owned by ubuntu user
 RUN chown -R ubuntu:ubuntu /workspaces && \
-    chown -R ubuntu:ubuntu /home/ubuntu && \
-    chown -R ubuntu:ubuntu /run/user/$(id -u ubuntu) && \
-    chmod -R 0700 /run/user/$(id -u ubuntu)
+    chown -R ubuntu:ubuntu /home/ubuntu
 
 # Change user and trust shortcuts
 USER ubuntu
@@ -160,3 +162,4 @@ RUN ( \
 WORKDIR /workspaces
 ENTRYPOINT [ "start-vnc-session" ]
 CMD [ "bash", "-i" ]
+
