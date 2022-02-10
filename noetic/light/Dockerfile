@@ -52,7 +52,7 @@ RUN chmod +x /usr/bin/start-jupyter && \
 # Install Smartgit
 COPY smartgit /usr/bin/
 RUN apt-get update && \
-    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_1_3.deb && \
+    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_2_2.deb && \
     gdebi -n smart.deb && \
     rm smart.deb && \
     apt-get clean && \
