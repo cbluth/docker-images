@@ -77,8 +77,9 @@ ENV INFOPATH="${INFOPATH}:/home/linuxbrew/.linuxbrew/share/info"
 ENV HOMEBREW_NO_AUTO_UPDATE=1
 ENV GIT_PROMPT_ONLY_IN_REPO=1
 
-# Set up path var
+# Set up en vars
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
+ENV XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 # Install informative git for bash
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
@@ -93,12 +94,15 @@ RUN cp /usr/bin/ccache /usr/local/bin/ && \
     ln -s /usr/bin/ccache /usr/local/bin/cc  && \
     ln -s /usr/bin/ccache /usr/local/bin/c++
 
-# Create workspace
-RUN mkdir /workspaces
+# Create dirs
+RUN mkdir /workspaces && \
+    mkdir /run/user/$(id -u ubuntu)
 
 # Make sure specific dirs are owned by ubuntu user
 RUN chown -R ubuntu:ubuntu /workspaces && \
-    chown -R ubuntu:ubuntu /home/ubuntu
+    chown -R ubuntu:ubuntu /home/ubuntu && \
+    chown -R ubuntu:ubuntu /run/user/$(id -u ubuntu) && \
+    chmod -R 0700 /run/user/$(id -u ubuntu)
 
 # Change user
 USER ubuntu
