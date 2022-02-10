@@ -79,7 +79,7 @@ ENV GIT_PROMPT_ONLY_IN_REPO=1
 
 # Set up en vars
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
-ENV XDG_RUNTIME_DIR=/run/user/$(id -u)
+ENV XDG_RUNTIME_DIR="/run/user/$(id -u)"
 
 # Install informative git for bash
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
