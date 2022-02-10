@@ -63,7 +63,7 @@ RUN apt-get update && \
     chmod +x /usr/bin/smartgit && \
     dos2unix /usr/bin/smartgit
 
-# Create user ubuntu
+# Create ubuntu user
 RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
     yes ubuntu | passwd ubuntu && \
     # passwordless sudo for users in the 'sudo' group
@@ -80,8 +80,9 @@ ENV INFOPATH="${INFOPATH}:/home/linuxbrew/.linuxbrew/share/info"
 ENV HOMEBREW_NO_AUTO_UPDATE=1
 ENV GIT_PROMPT_ONLY_IN_REPO=1
 
-# Set up path var
+# Setup env vars
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
+ENV XDG_RUNTIME_DIR="/run/user/$(id -u)"
 
 # Install informative git for bash
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
@@ -96,12 +97,18 @@ RUN cp /usr/bin/ccache /usr/local/bin/ && \
     ln -s /usr/bin/ccache /usr/local/bin/cc  && \
     ln -s /usr/bin/ccache /usr/local/bin/c++
 
-# Create workspace
-RUN mkdir /workspaces
-
 # Make sure specific dirs are owned by ubuntu user
 RUN chown -R ubuntu:ubuntu /workspaces && \
-    chown -R ubuntu:ubuntu /home/ubuntu
+    chown -R ubuntu:ubuntu /home/ubuntu && \
+    chown -R ubuntu:ubuntu /run/user/$(id -u ubuntu) && \
+    chmod -R 0700 /run/user/$(id -u ubuntu)
+    
+# Create dirs
+RUN mkdir /workspaces && \
+    mkdir /home/ubuntu/Desktop && \
+    mkdir /home/ubuntu/.config && \
+    touch /home/ubuntu/.config/mimeapps.list && \
+    mkdir /run/user/$(id -u ubuntu)
 
 # Change user
 USER ubuntu
