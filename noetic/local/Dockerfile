@@ -77,7 +77,7 @@ RUN chmod +x /usr/bin/start-jupyter && \
 # Install Smartgit
 COPY smartgit /usr/bin/
 RUN apt-get update && \
-    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_1_3.deb && \
+    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_2_2.deb && \
     gdebi -n smart.deb && \
     rm smart.deb && \
     apt-get clean && \
@@ -85,7 +85,7 @@ RUN apt-get update && \
     chmod +x /usr/bin/smartgit && \
     dos2unix /usr/bin/smartgit
 
-# Create user ubuntu
+# Create ubuntu user
 RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
     yes ubuntu | passwd ubuntu && \
     # passwordless sudo for users in the 'sudo' group
