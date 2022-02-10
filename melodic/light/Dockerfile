@@ -96,10 +96,6 @@ RUN cp /usr/bin/ccache /usr/local/bin/ && \
     ln -s /usr/bin/ccache /usr/local/bin/cc  && \
     ln -s /usr/bin/ccache /usr/local/bin/c++
 
-# Make sure specific dirs are owned by ubuntu user
-RUN chown -R ubuntu:ubuntu /workspaces && \
-    chown -R ubuntu:ubuntu /home/ubuntu
-
 # XDG_RUNTIME_DIR
 RUN mkdir /run/user/1000 && \
     chown -R ubuntu:ubuntu /run/user/1000 && \
@@ -108,6 +104,10 @@ ENV XDG_RUNTIME_DIR="/run/user/1000"
 
 # Create dirs
 RUN mkdir /workspaces
+
+# Make sure specific dirs are owned by ubuntu user
+RUN chown -R ubuntu:ubuntu /workspaces && \
+    chown -R ubuntu:ubuntu /home/ubuntu
 
 # Change user
 USER ubuntu
