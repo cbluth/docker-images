@@ -74,7 +74,7 @@ RUN chmod +x /usr/bin/start-jupyter && \
 # Install Smartgit
 COPY smartgit /usr/bin/
 RUN apt-get update && \
-    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_1_3.deb && \
+    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_2_2.deb && \
     gdebi -n smart.deb && \
     rm smart.deb && \
     apt-get clean && \
@@ -82,7 +82,7 @@ RUN apt-get update && \
     chmod +x /usr/bin/smartgit && \
     dos2unix /usr/bin/smartgit
 
-# Create user ubuntu
+# Create ubuntu user
 RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
     yes ubuntu | passwd ubuntu && \
     # passwordless sudo for users in the 'sudo' group
@@ -91,8 +91,10 @@ RUN useradd -l -u 1000 -G sudo -md /home/ubuntu -s /bin/bash ubuntu && \
 # Switch to ubuntu user
 USER ubuntu
 
+# Setup env vars
 ENV DISPLAY=:0
 ENV PATH="/usr/lib/ccache:/home/ubuntu/.local/bin:/usr/share/smartgit/bin:${PATH}"
+ENV XDG_RUNTIME_DIR="/run/user/$(id -u)"
 
 # Install informative git for bash
 ENV GIT_PROMPT_ONLY_IN_REPO=1
@@ -113,11 +115,12 @@ COPY start-vnc-session /usr/bin/
 RUN chmod +x /usr/bin/start-vnc-session && \
     dos2unix /usr/bin/start-vnc-session
 
-# Create workspace
+# Create dirs
 RUN mkdir /workspaces && \
     mkdir /home/ubuntu/Desktop && \
     mkdir /home/ubuntu/.config && \
-    touch /home/ubuntu/.config/mimeapps.list
+    touch /home/ubuntu/.config/mimeapps.list && \
+    mkdir /run/user/$(id -u ubuntu)
 
 # Setup icons
 COPY ["chromium-browser.desktop", "/usr/share/applications/chromium-browser.desktop"]
@@ -131,7 +134,9 @@ RUN cp /usr/share/applications/chromium-browser.desktop /home/ubuntu/Desktop/chr
 
 # Make sure specific dirs are owned by ubuntu user
 RUN chown -R ubuntu:ubuntu /workspaces && \
-    chown -R ubuntu:ubuntu /home/ubuntu
+    chown -R ubuntu:ubuntu /home/ubuntu && \
+    chown -R ubuntu:ubuntu /run/user/$(id -u ubuntu) && \
+    chmod -R 0700 /run/user/$(id -u ubuntu)
 
 # Change user and trust shortcuts
 USER ubuntu
