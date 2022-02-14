@@ -44,7 +44,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
   sudo apt-get clean && \
   sudo rm -Rf /var/lib/apt/lists/* && \
   mkdir ${HOME}/mosek/ && \
-  sudo -H CVXOPT_BUILD_GLPK=1 pip3 install cvxopt gurobipy==9.5.0 ipopt matplotlib mosek==9.3.11 osqp pulp pygraphviz pyopt PYPOWER quadprog scipy && \
+  sudo -H CVXOPT_BUILD_GLPK=1 pip3 install --ignore-installed cvxopt gurobipy==9.5.0 ipopt matplotlib mosek==9.3.11 osqp pulp pygraphviz pyopt PYPOWER quadprog scipy && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \
