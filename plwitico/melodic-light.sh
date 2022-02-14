@@ -146,6 +146,7 @@ if [ -n "${CONTAINER_NAME:-}" ] ; then
 fi
 
 ${DOCKER_EXECUTABLE:-docker} run \
+    -p 127.0.0.1:11311:11311 \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
     --env="XAUTHORITY=$XAUTH" \
