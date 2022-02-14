@@ -68,7 +68,7 @@ RUN apt-get update && \
     rm -Rf /var/lib/apt/lists/*
 
 # Install jupyter
-RUN pip3 install --ignore-installed --upgrade ipython jupyter jupyterlab notebook pyclean testresources && \
+RUN pip3 install --ignore-installed --upgrade ipython jupyter jupyterlab notebook overloading pyclean testresources && \
     rm -rf /root/.cache
 COPY start-jupyter /usr/bin/start-jupyter
 RUN chmod +x /usr/bin/start-jupyter && \
