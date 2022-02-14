@@ -5,6 +5,7 @@ case $1 in
     docker run -d \
       --shm-size=4g \
       -p 127.0.0.1:5901:6080 \
+      -p 127.0.0.1:11311:11311 \
       --cap-add=SYS_PTRACE \
       --security-opt seccomp=unconfined \
       --security-opt=apparmor:unconfined \
