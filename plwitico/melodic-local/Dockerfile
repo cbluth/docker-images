@@ -49,7 +49,7 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.1/gurobi9.1.2_linux64.ta
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \
-  catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release \
+  catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
   catkin build && \
   ccache -s && \
