@@ -2,8 +2,6 @@
 	"extensions": [
 		"cschlosser.doxdocgen",
 		"DotJoshJohnson.xml",
-		"eamodio.gitlens",
-		"felipecaputo.git-project-manager",
 		"GitHub.vscode-pull-request-github",
 		"ms-iot.vscode-ros",
 		"ms-python.python",

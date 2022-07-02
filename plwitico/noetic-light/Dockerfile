@@ -31,29 +31,34 @@ RUN wget -O gurobi.tar.gz https://packages.gurobi.com/9.5/gurobi9.5.0_linux64.ta
   echo "# mosek"; \
   echo "export PATH=\"\${PATH}:/opt/mosek/9.3/tools/platform/linux64x86/bin\""; \
   ) >> ~/.bashrc && \
-  git config --global url."https://$GITHUB_TOKEN:@github.com/".insteadOf "https://github.com/" && \
+  git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/" && \
   git clone --branch ${ROS_DISTRO}-devel --depth 1 --recurse-submodules \
   https://github.com/CentroEPiaggio/planning-with-tight-constraints.git && \
-  git config --global --remove-section url."https://$GITHUB_TOKEN:@github.com/" && \
+  git config --global --remove-section url."https://${GITHUB_TOKEN}:@github.com/" && \
   cd planning-with-tight-constraints/ && \
   sudo apt-get update && \
   rosdep update && \
   sudo apt-get dist-upgrade -y && \
-  sudo apt-get install -y coinor-libipopt-dev gfortran libglpk-dev libmetis-dev && \
+  sudo apt-get install -y coinor-libipopt-dev gfortran graphviz graphviz-dev libglpk-dev libmetis-dev && \
   rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -r -y && \
   sudo apt-get clean && \
   sudo rm -Rf /var/lib/apt/lists/* && \
   mkdir ${HOME}/mosek/ && \
-  sudo -H CVXOPT_BUILD_GLPK=1 pip3 install --ignore-installed cvxopt gurobipy==9.5.0 ipopt matplotlib mosek==9.3.11 osqp pulp pygraphviz pyopt PYPOWER quadprog scipy && \
+  sudo -H CVXOPT_BUILD_GLPK=1 pip3 install --ignore-installed cvxopt gurobipy==9.5.0 ipopt matplotlib mosek==9.3.11 osqp \
+  pulp pyclean pygraphviz pyopt quadprog scipy testresources && \
   sudo rm -rf /root/.cache && \
   catkin --version && \
   rm -rf src/planning_with_tight_constraints/ && \
-  catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
+  catkin config --extend /opt/ros/${ROS_DISTRO} --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && \
   catkin build && \
   ccache -s && \
   cd .. && rm -Rf planning-with-tight-constraints/ && mkdir planning-with-tight-constraints/
 
+# Insert the init script
+COPY init-script.sh /usr/bin/
+RUN sudo chmod +x /usr/bin/init-script.sh
+
 # Start the container
 WORKDIR /workspaces/planning-with-tight-constraints
-CMD ["bash"]
+ENTRYPOINT ["init-script.sh"]
+CMD ["bash", "-i"]
