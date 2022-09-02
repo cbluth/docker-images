@@ -39,7 +39,7 @@ RUN apt-get update && \
 # Install Smartgit
 COPY smartgit /usr/bin/
 RUN apt-get update && \
-    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_2_2.deb && \
+    wget -O smart.deb https://www.syntevo.com/downloads/smartgit/smartgit-21_2_4.deb && \
     gdebi -n smart.deb && \
     rm smart.deb && \
     apt-get clean && \
